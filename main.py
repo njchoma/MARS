@@ -41,10 +41,14 @@ if __name__ == '__main__':
 
     parser.add_argument('--sampler',    type=str,   default='sa',       help='mcmc sampling algorithm')
     parser.add_argument('--proposal',   type=str,   default='editor',   help='how to pose proposals')
-    parser.add_argument('--objectives', type=str,   default='gsk3b,jnk3,qed,sa')
-    parser.add_argument('--score_wght', type=str,   default='  1.0, 1.0, 1.0, 1.0')
-    parser.add_argument('--score_succ', type=str,   default='  0.5, 0.5, 0.6, .67')
-    parser.add_argument('--score_clip', type=str,   default='  0.6, 0.6, 0.7, 0.7')
+    parser.add_argument('--objectives', type=str,   default='qed,sa')
+    parser.add_argument('--score_wght', type=str,   default=' 1.0, 1.0')
+    parser.add_argument('--score_succ', type=str,   default=' 0.6, .67')
+    parser.add_argument('--score_clip', type=str,   default=' 0.7, 0.7')
+    # parser.add_argument('--objectives', type=str,   default='gsk3b,jnk3,qed,sa')
+    # parser.add_argument('--score_wght', type=str,   default='  1.0, 1.0, 1.0, 1.0')
+    # parser.add_argument('--score_succ', type=str,   default='  0.5, 0.5, 0.6, .67')
+    # parser.add_argument('--score_clip', type=str,   default='  0.6, 0.6, 0.7, 0.7')
     
     parser.add_argument('--lr',             type=float, default=3e-4)
     parser.add_argument('--dataset_size',   type=int,   default=50000)

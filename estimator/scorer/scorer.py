@@ -10,6 +10,7 @@ import networkx as nx
 
 from ...common.chem import standardize_smiles
 from . import sa_scorer, kinase_scorer #, drd2_scorer, chemprop_scorer
+from .adtgpu.get_reward import get_dock_score
 
 ### get scores
 def get_scores(objective, mols):
@@ -43,6 +44,8 @@ def get_score(objective, mol):
         elif 'rand' in objective:
             raise NotImplementedError
             # return rand_scorer.get_score(objective, mol)
+        elif 'dock' in objective:
+            return get_dock_score(mol)
         else: raise NotImplementedError
     except ValueError:
         return 0.
