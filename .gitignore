@@ -1,4 +1,6 @@
+*.swp
 my_runs/
+estimator/scorer/adtgpu/autodockgpu/
 runs/
 data/vocab_*/
 .vscode
