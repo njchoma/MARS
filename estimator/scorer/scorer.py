@@ -41,11 +41,11 @@ def get_score(objective, mol):
             return Descriptors.MolLogP(mol)
         elif objective == 'penalized_logp':
             return penalized_logp(mol)
+        elif objective =='dock':
+            return get_dock_score(mol)
         elif 'rand' in objective:
             raise NotImplementedError
             # return rand_scorer.get_score(objective, mol)
-        elif 'dock' in objective:
-            return get_dock_score(mol)
         else: raise NotImplementedError
     except ValueError:
         return 0.

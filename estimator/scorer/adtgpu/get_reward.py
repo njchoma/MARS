@@ -21,6 +21,8 @@ ADT_PATH = "/clusterfs/csdata/pkg/autodock-gpu/AutoDock-GPU/bin/autodock_gpu_64w
 # NSP15, site A3H
 RECEPTOR_FILE = "NSP15_6W01_A_3_H_receptor.pdbqt"
 
+CURR_DIR='./MARS/estimator/scorer/adtgpu'
+
 ######################################
 
 def get_dock_score(mol, args=None):
@@ -34,10 +36,10 @@ def get_dock_score(mol, args=None):
     else: obabel_path=OBABEL_PATH
     if(args and args.adt_path!=''): adt_path=args.adt_path
     else: adt_path=ADT_PATH
-    if(args and args.receptor_file!=''): receptor_file="./src/reward/adtgpu/receptor/"+args.receptor_file
-    else: receptor_file="./src/reward/adtgpu/receptor/"+RECEPTOR_FILE
-    if(args and args.run_id!=''): run_dir="./src/reward/adtgpu/autodockgpu"+str(args.run_id)
-    else: run_dir="./src/reward/adtgpu/autodockgpu"
+    if(args and args.receptor_file!=''): receptor_file=CURR_DIR+"/receptor/"+args.receptor_file
+    else: receptor_file=CURR_DIR+"/receptor/"+RECEPTOR_FILE
+    if(args and args.run_id!=''): run_dir=CURR_DIR+"/autodockgpu"+str(args.run_id)
+    else: run_dir=CURR_DIR+"/autodockgpu"
     if(DEBUG): print("adttmp: {}".format(run_dir))
 
     smiles = str(smiles)
@@ -165,4 +167,4 @@ def get_dock_score(mol, args=None):
             
     shutil.rmtree(run_dir)
     print("Reward Scores (-dock): {}".format(pred_docking_score))
-    return (pred_docking_score)
+    return pred_docking_score[0] / 20.0
