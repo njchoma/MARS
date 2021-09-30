@@ -16,7 +16,7 @@ from .adtgpu.get_reward import get_dock_score
 def get_scores(objective, mols, old_mols):
     mols = [standardize_smiles(mol) for mol in mols]
     mols_valid = [mol for mol in mols if mol is not None]
-    old_mols_valid = [old_mol for mol, old_mol in zip(mols, old_mol) if mol is not None]
+    old_mols_valid = [old_mol for mol, old_mol in zip(mols, old_mols) if mol is not None]
     
     if objective == 'drd2':
         scores = drd2_scorer.get_scores(mols_valid)
@@ -24,7 +24,7 @@ def get_scores(objective, mols, old_mols):
         scores = kinase_scorer.get_scores(objective, mols_valid)
     elif objective.startswith('chemprop'):
         scores = chemprop_scorer.get_scores(objective, mols_valid)
-    else: scores = [get_score(objective, mol, old_mol) for mol, old_mol in zip(mols_valid]
+    else: scores = [get_score(objective, mol, old_mol) for mol, old_mol in zip(mols_valid, old_mols_valid)]
         
     scores = [scores.pop(0) if mol is not None else 0. for mol in mols]
     return scores
