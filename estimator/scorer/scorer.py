@@ -11,6 +11,7 @@ import networkx as nx
 from ...common.chem import standardize_smiles
 from . import sa_scorer, kinase_scorer #, drd2_scorer, chemprop_scorer
 from .adtgpu.get_reward import get_dock_score
+from .constrained_scorer import constrained_score
 
 ### get scores
 def get_scores(objective, mols, old_mols):
@@ -44,6 +45,12 @@ def get_score(objective, mol, old_mol):
             return penalized_logp(mol)
         elif objective =='dock':
             return get_dock_score(mol)
+        elif objective =='constrained_dock':
+            main_reward = get_dock_score(mol)
+            return constrained_score(mol, old_mol, main_reward)
+        elif objective =='constrained_plogp':
+            main_reward = penalized_logp(mol)
+            return constrained_score(mol, old_mol, main_reward)
         elif 'rand' in objective:
             raise NotImplementedError
             # return rand_scorer.get_score(objective, mol)
