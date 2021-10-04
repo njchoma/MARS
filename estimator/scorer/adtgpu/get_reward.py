@@ -167,4 +167,4 @@ def get_dock_score(mol, args=None):
             
     shutil.rmtree(run_dir)
     print("Reward Scores (-dock): {}".format(pred_docking_score))
-    return pred_docking_score[0] / 20.0
+    return pred_docking_score[0]

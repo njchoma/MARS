@@ -46,8 +46,9 @@ def get_score(objective, mol, old_mol):
         elif objective =='dock':
             return get_dock_score(mol)
         elif objective =='constrained_dock':
-            main_reward = get_dock_score(mol)
-            return constrained_score(mol, old_mol, main_reward)
+            new_reward = get_dock_score(mol)
+            old_reward = get_dock_score(old_mol)
+            return constrained_score(mol, old_mol, new_reward, old_reward)
         elif objective =='constrained_plogp':
             main_reward = penalized_logp(mol)
             return constrained_score(mol, old_mol, main_reward)
