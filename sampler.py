@@ -169,6 +169,7 @@ class Sampler():
         
         ### sample
         old_mols = [mol for mol in mols_init]
+        orig_mols = [mol for mol in mols_init]
         old_dicts = self.estimator.get_scores(old_mols, old_mols)
         old_scores = self.scores_from_dicts(old_dicts)
         acc_rates = [0. for _ in old_mols]
@@ -178,7 +179,7 @@ class Sampler():
             if self.patience <= 0: break
             self.step = step
             new_mols, fixings = self.proposal.propose(old_mols) 
-            new_dicts = self.estimator.get_scores(new_mols, old_mols)
+            new_dicts = self.estimator.get_scores(new_mols, orig_mols)
             new_scores = self.scores_from_dicts(new_dicts)
             
             indices = [i for i in range(len(old_mols)) if new_scores[i] > old_scores[i]]
