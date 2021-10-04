@@ -9,9 +9,18 @@ import rdkit.Chem.QED as QED
 import networkx as nx
 
 from ...common.chem import standardize_smiles
-from . import sa_scorer, kinase_scorer #, drd2_scorer, chemprop_scorer
+from . import sa_scorer, kinase_scorer, sim_scorer#, drd2_scorer, chemprop_scorer
 from .adtgpu.get_reward import get_dock_score
-from .constrained_scorer import constrained_score
+
+CONSTRAIN_FACTOR = 100.0
+DELTA = 0.6
+class Args:
+    def __init__(self, obabel_path='', adt_path='', receptor_file='', run_id=''):
+        self.obabel_path = obabel_path
+        self.adt_path = adt_path
+        self.receptor_file = receptor_file
+        self.run_id = run_id
+ARGS = Args(run_id='003')
 
 ### get scores
 def get_scores(objective, mols, old_mols):
@@ -21,6 +30,9 @@ def get_scores(objective, mols, old_mols):
     
     if objective == 'drd2':
         scores = drd2_scorer.get_scores(mols_valid)
+    #elif objective == 'dock':
+    #    scores = get_dock_score(mols_valid, ARGS)
+    #    scores = [s / 40.0 for s in scores]
     elif objective == 'jnk3' or objective == 'gsk3b':
         scores = kinase_scorer.get_scores(objective, mols_valid)
     elif objective.startswith('chemprop'):
@@ -32,7 +44,13 @@ def get_scores(objective, mols, old_mols):
 
 def get_score(objective, mol, old_mol):
     try:
-        if objective == 'qed': 
+        if objective == 'sim': 
+            return sim_scorer.sim_score(mol, old_mol, CONSTRAIN_FACTOR, DELTA) / 40.0
+        elif objective == 'sim_actual': 
+            return sim_scorer.sim_actual(mol, old_mol)
+        elif objective == 'dock':
+            return get_dock_score(mol, ARGS)[0] / 40.0
+        elif objective == 'qed': 
             return QED.qed(mol)
         elif objective == 'sa': 
             x = sa_scorer.calculateScore(mol)
@@ -43,14 +61,6 @@ def get_score(objective, mol, old_mol):
             return Descriptors.MolLogP(mol)
         elif objective == 'penalized_logp':
             return penalized_logp(mol)
-        elif objective =='dock':
-            return get_dock_score(mol)
-        elif objective =='constrained_dock':
-            main_reward = get_dock_score(mol)
-            return constrained_score(mol, old_mol, main_reward)
-        elif objective =='constrained_plogp':
-            main_reward = penalized_logp(mol)
-            return constrained_score(mol, old_mol, main_reward)
         elif 'rand' in objective:
             raise NotImplementedError
             # return rand_scorer.get_score(objective, mol)

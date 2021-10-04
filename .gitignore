@@ -1,9 +1,12 @@
 *.swp
-my_runs/
-estimator/scorer/adtgpu/autodockgpu/
+log/
 runs/
+my_runs/
+test_runs/
+run_*
 data/vocab_*/
 .vscode
+*autodockgpu*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
