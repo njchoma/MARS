@@ -23,10 +23,11 @@ class Args:
 ARGS = Args(run_id='003')
 
 ### get scores
-def get_scores(objective, mols, old_mols):
+def get_scores(objective, mols, old_mols, init_mols):
     mols = [standardize_smiles(mol) for mol in mols]
     mols_valid = [mol for mol in mols if mol is not None]
     old_mols_valid = [old_mol for mol, old_mol in zip(mols, old_mols) if mol is not None]
+    init_mols_valid = [init_mol for mol, init_mol in zip(mols, init_mols) if mol is not None]
     
     if objective == 'drd2':
         scores = drd2_scorer.get_scores(mols_valid)
@@ -37,17 +38,18 @@ def get_scores(objective, mols, old_mols):
         scores = kinase_scorer.get_scores(objective, mols_valid)
     elif objective.startswith('chemprop'):
         scores = chemprop_scorer.get_scores(objective, mols_valid)
-    else: scores = [get_score(objective, mol, old_mol) for mol, old_mol in zip(mols_valid, old_mols_valid)]
+    else: scores = [get_score(objective, mol, old_mol, init_mol)
+                    for mol, old_mol, init_mol in zip(mols_valid, old_mols_valid, init_mols_valid)]
         
     scores = [scores.pop(0) if mol is not None else 0. for mol in mols]
     return scores
 
-def get_score(objective, mol, old_mol):
+def get_score(objective, mol, old_mol, init_mols):
     try:
         if objective == 'sim': 
-            return sim_scorer.sim_score(mol, old_mol, CONSTRAIN_FACTOR, DELTA) / 40.0
+            return sim_scorer.sim_score(mol, init_mols, CONSTRAIN_FACTOR, DELTA) / 40.0
         elif objective == 'sim_actual': 
-            return sim_scorer.sim_actual(mol, old_mol)
+            return sim_scorer.sim_actual(mol, init_mols)
         elif objective == 'dock':
             return get_dock_score(mol, ARGS)[0] / 40.0
         elif objective == 'qed': 

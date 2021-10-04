@@ -22,7 +22,7 @@ class Estimator():
         self.fps_ref = [AllChem.GetMorganFingerprintAsBitVect(x, 3, 2048) 
                         for x in config['mols_ref']] if config['mols_ref'] else None
 
-    def get_scores(self, mols, old_mols):
+    def get_scores(self, mols, old_mols, init_mols=None):
         '''
         @params:
             mols: molecules to estimate score
@@ -31,7 +31,7 @@ class Estimator():
         '''
         dicts = [{} for _ in mols]
         for obj in self.objectives:
-            scores = get_scores(obj, mols, old_mols)
+            scores = get_scores(obj, mols, old_mols, init_mols)
             for i, mol in enumerate(mols):
                 dicts[i][obj] = scores[i]
         return dicts
