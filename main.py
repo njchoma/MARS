@@ -34,8 +34,8 @@ if __name__ == '__main__':
     parser.add_argument('--vocab',      type=str,   default='nsp15')
     parser.add_argument('--vocab_size', type=int,   default=1000)
     parser.add_argument('--max_size',   type=int,   default=40)
-    parser.add_argument('--num_mols',   type=int,   default=1000)
-    parser.add_argument('--num_step',   type=int,   default=1000)
+    parser.add_argument('--num_mols',   type=int,   default=100)
+    parser.add_argument('--num_step',   type=int,   default=500)
     parser.add_argument('--num_runs',   type=int,   default=10)
     parser.add_argument('--log_every',  type=int,   default=1)
 

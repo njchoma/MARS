@@ -20,7 +20,7 @@ class Args:
         self.adt_path = adt_path
         self.receptor_file = receptor_file
         self.run_id = run_id
-ARGS = Args(run_id='003')
+ARGS = Args(run_id='006')
 
 ### get scores
 def get_scores(objective, mols, old_mols, init_mols):
